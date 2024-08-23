@@ -6,9 +6,11 @@ import (
 
 // AuthRole 表示角色模型
 type AuthRole struct {
-	RoleID     int    `gorm:"primaryKey"`
-	RoleName   string `gorm:"size:20"`
-	RoleStatus int    `gorm:"default:1"` // 0 = DELETE, 1 = ACTIVE, 2 = BLOCK
+	RoleID     int     `gorm:"primaryKey"`
+	RoleName   string  `gorm:"size:20"`
+	RoleStatus int     `gorm:"default:1"` // 0 = DELETE, 1 = ACTIVE, 2 = BLOCK
+	Users      []User  `gorm:"foreignKey:RoleID"`
+	Admins     []Admin `gorm:"foreignKey:RoleID"`
 }
 
 // User 表示用户模型
@@ -23,8 +25,11 @@ type User struct {
 	UserPoint      int
 	UserClass      int
 	UserRegister   time.Time
-	RoleID         int `gorm:"index"`
-	Status         int `gorm:"default:1"` // 0 = DELETE, 1 = ACTIVE, 2 = BLOCK
+	RoleID         int       `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:RoleID"`
+	Status         int       `gorm:"default:1"` // 0 = DELETE, 1 = ACTIVE, 2 = BLOCK
+	Sections       []Section `gorm:"foreignKey:UID"`
+	Topics         []Topic   `gorm:"foreignKey:UID"`
+	Replies        []Reply   `gorm:"foreignKey:UID"`
 }
 
 // Admin 表示管理员模型
@@ -32,37 +37,39 @@ type Admin struct {
 	AdminID       int    `gorm:"primaryKey"`
 	AdminName     string `gorm:"size:20"`
 	AdminPassword string `gorm:"size:20"`
-	RoleID        int    `gorm:"index"`
+	RoleID        int    `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:RoleID"`
 	Status        int    `gorm:"default:1"` // 0 = DELETE, 1 = ACTIVE, 2 = BLOCK
 }
 
 // Section 表示版块模型
 type Section struct {
 	SID        int    `gorm:"primaryKey"`
-	UID        int    `gorm:"index"` // Moderator (UserId)
+	UID        int    `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UID"` // Moderator (UserId)
 	Name       string `gorm:"size:50"`
 	Statement  string `gorm:"type:text"`
 	ClickCount int
 	TopicCount int
+	Topics     []Topic `gorm:"foreignKey:SID"`
 }
 
 // Topic 表示主题模型
 type Topic struct {
 	TID        int    `gorm:"primaryKey"`
-	SID        int    `gorm:"index"` // TopicSectionID
-	UID        int    `gorm:"index"` // TopicUserId
+	SID        int    `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:SID"` // TopicSectionID
+	UID        int    `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UID"` // TopicUserId
 	Title      string `gorm:"size:20"`
 	Content    string `gorm:"type:text"`
 	Time       time.Time
 	ReplyCount int
 	ClickCount int
+	Replies    []Reply `gorm:"foreignKey:TID"`
 }
 
 // Reply 表示回复模型
 type Reply struct {
 	RID        int    `gorm:"primaryKey"`
-	TID        int    `gorm:"index"` // ReplyTopicID
-	UID        int    `gorm:"index"` // ReplyUserId
+	TID        int    `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TID"` // ReplyTopicID
+	UID        int    `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UID"` // ReplyUserId
 	Content    string `gorm:"type:text"`
 	Time       time.Time
 	ClickCount int

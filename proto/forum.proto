@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package forum;
+option go_package = "github.com/longsizhuo/forum/proto;forum";
+
+service ForumService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc CreateTopic(CreateTopicRequest) returns (CreateTopicResponse);
+  rpc CreateReply(CreateReplyRequest) returns (CreateReplyResponse);
+  rpc GetTopics(GetTopicsRequest) returns (GetTopicsResponse);
+  rpc GetReplies(GetRepliesRequest) returns (GetRepliesResponse);
+}
+
+message CreateUserRequest {
+  string userName = 1;
+  string userPassword = 2;
+  string userSex = 3;
+  int32 userAge = 4;
+}
+
+message CreateUserResponse {
+  int32 userId = 1;
+}
+
+message CreateTopicRequest {
+  int32 userId = 1;
+  int32 sectionId = 2;
+  string title = 3;
+  string content = 4;
+}
+
+message CreateTopicResponse {
+  int32 topicId = 1;
+}
+
+message CreateReplyRequest {
+  int32 userId = 1;
+  int32 topicId = 2;
+  string content = 3;
+}
+
+message CreateReplyResponse {
+  int32 replyId = 1;
+}
+
+message GetTopicsRequest {
+  int32 sectionId = 1;
+}
+
+message GetTopicsResponse {
+  repeated Topic topics = 1;
+}
+
+message Topic {
+  int32 topicId = 1;
+  int32 userId = 2;
+  string title = 3;
+  string content = 4;
+  int32 replyCount = 5;
+}
+
+message GetRepliesRequest {
+  int32 topicId = 1;
+}
+
+message GetRepliesResponse {
+  repeated Reply replies = 1;
+}
+
+message Reply {
+  int32 replyId = 1;
+  int32 userId = 2;
+  string content = 3;
+}
