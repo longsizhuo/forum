@@ -1,3 +1,4 @@
+// proto/forum.proto
 syntax = "proto3";
 
 package proto;
