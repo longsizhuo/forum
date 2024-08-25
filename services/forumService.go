@@ -1,5 +1,5 @@
 // service/forumService.go
-package service
+package services
 
 import (
 	"context"
@@ -8,53 +8,55 @@ import (
 	"gorm.io/gorm"
 )
 
-type server struct {
+type Server struct {
 	pb.UnimplementedForumServiceServer
-	db *gorm.DB
+	Db *gorm.DB
 }
 
 // CreateUser creates a new user
-func (s *server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	defaultRoleID := 1
 	user := models.User{
 		UserName:     req.UserName,
 		UserPassword: req.UserPassword,
 		UserSex:      req.UserSex,
 		UserAge:      int(req.UserAge),
+		RoleID:       defaultRoleID,
 	}
-	if err := s.db.Create(&user).Error; err != nil {
+	if err := s.Db.Create(&user).Error; err != nil {
 		return nil, err
 	}
 	return &pb.CreateUserResponse{UserId: int32(user.UID)}, nil
 }
 
-func (s *server) CreateTopic(ctx context.Context, req *pb.CreateTopicRequest) (*pb.CreateTopicResponse, error) {
+func (s *Server) CreateTopic(ctx context.Context, req *pb.CreateTopicRequest) (*pb.CreateTopicResponse, error) {
 	topic := models.Topic{
 		UID:     int(req.UserId),
 		SID:     int(req.SectionId),
 		Title:   req.Title,
 		Content: req.Content,
 	}
-	if err := s.db.Create(&topic).Error; err != nil {
+	if err := s.Db.Create(&topic).Error; err != nil {
 		return nil, err
 	}
 	return &pb.CreateTopicResponse{TopicId: int32(topic.TID)}, nil
 }
 
-func (s *server) CreateReply(ctx context.Context, req *pb.CreateReplyRequest) (*pb.CreateReplyResponse, error) {
+func (s *Server) CreateReply(ctx context.Context, req *pb.CreateReplyRequest) (*pb.CreateReplyResponse, error) {
 	reply := models.Reply{
 		UID:     int(req.UserId),
 		TID:     int(req.TopicId),
 		Content: req.Content,
 	}
-	if err := s.db.Create(&reply).Error; err != nil {
+	if err := s.Db.Create(&reply).Error; err != nil {
 		return nil, err
 	}
 	return &pb.CreateReplyResponse{ReplyId: int32(reply.RID)}, nil
 }
 
-func (s *server) GetTopics(ctx context.Context, req *pb.GetTopicsRequest) (*pb.GetTopicsResponse, error) {
+func (s *Server) GetTopics(ctx context.Context, req *pb.GetTopicsRequest) (*pb.GetTopicsResponse, error) {
 	var topics []models.Topic
-	if err := s.db.Where("s_id = ?", req.SectionId).Find(&topics).Error; err != nil {
+	if err := s.Db.Where("s_id = ?", req.SectionId).Find(&topics).Error; err != nil {
 		return nil, err
 	}
 
@@ -72,9 +74,9 @@ func (s *server) GetTopics(ctx context.Context, req *pb.GetTopicsRequest) (*pb.G
 	return &pb.GetTopicsResponse{Topics: responseTopics}, nil
 }
 
-func (s *server) GetReplies(ctx context.Context, req *pb.GetRepliesRequest) (*pb.GetRepliesResponse, error) {
+func (s *Server) GetReplies(ctx context.Context, req *pb.GetRepliesRequest) (*pb.GetRepliesResponse, error) {
 	var replies []models.Reply
-	if err := s.db.Where("t_id = ?", req.TopicId).Find(&replies).Error; err != nil {
+	if err := s.Db.Where("t_id = ?", req.TopicId).Find(&replies).Error; err != nil {
 		return nil, err
 	}
 
