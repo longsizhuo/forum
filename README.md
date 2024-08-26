@@ -1,3 +1,5 @@
+This project is just a challenge for me, full stack gRPC
+
 1. First
 ```shell
 # go version: 1.23.0
