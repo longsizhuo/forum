@@ -3,9 +3,12 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"github.com/longsizhuo/forum/models"
 	pb "github.com/longsizhuo/forum/proto"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Server struct {
@@ -16,12 +19,37 @@ type Server struct {
 // CreateUser creates a new user
 func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	defaultRoleID := 1
+
+	dateOfBirth, err := time.Parse("2006/01/02", req.UserDateBirth)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.UserPassword != req.UserRePassword {
+		return nil, fmt.Errorf("passwords do not match")
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.UserPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, fmt.Errorf("failed to hash password: %v", err)
+	}
+
+	// Check if email is already registered (Assuming req contains Email field)
+	var existingUser models.User
+	if err := s.Db.Where("email = ?", req.UserEmail).First(&existingUser).Error; err == nil {
+		return nil, fmt.Errorf("email is already registered")
+	}
+
 	user := models.User{
 		UserName:     req.UserName,
-		UserPassword: req.UserPassword,
+		UserPassword: string(hashedPassword),
 		UserSex:      req.UserSex,
 		UserAge:      int(req.UserAge),
 		RoleID:       defaultRoleID,
+		UserEmail:    req.UserEmail,
+		DateBirth:    dateOfBirth,
+		UserRegister: time.Now(), // Assuming you want to set the creation time
 	}
 	if err := s.Db.Create(&user).Error; err != nil {
 		return nil, err
