@@ -16,16 +16,19 @@ type AuthRole struct {
 
 // User 表示用户模型
 type User struct {
-	UID            int    `gorm:"primaryKey"`
-	UserName       string `gorm:"size:20"`
-	UserPassword   string `gorm:"size:20"`
-	UserSex        string `gorm:"size:10"`
-	UserAge        int
-	UserOccupation string `gorm:"size:50"`
-	UserHobby      string `gorm:"size:255"`
-	UserPoint      int
-	UserClass      int
-	UserRegister   time.Time
+	UID            int       `gorm:"primaryKey"`
+	UserBirth      string    `gorm:"size:20"`
+	UserEmail      string    `gorm:"size:50"`
+	UserName       string    `gorm:"size:20"`
+	UserPassword   string    `gorm:"size:20"`
+	UserSex        string    `gorm:"size:10"`
+	UserAge        int       `gorm:"size:3"`
+	UserOccupation string    `gorm:"size:50"`
+	UserHobby      string    `gorm:"size:255"`
+	DateBirth      time.Time `gorm:"type:date"`
+	UserPoint      int       `gorm:"default:0"`
+	UserClass      int       `gorm:"default:0"`
+	UserRegister   time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	RoleID         int       `gorm:"index;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:RoleID"`
 	Status         int       `gorm:"default:1"` // 0 = DELETE, 1 = ACTIVE, 2 = BLOCK
 	Sections       []Section `gorm:"foreignKey:UID"`

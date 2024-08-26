@@ -15,8 +15,11 @@ service ForumService {
 message CreateUserRequest {
   string userName = 1;
   string userPassword = 2;
-  string userSex = 3;
-  int32 userAge = 4;
+  string userRePassword = 3;
+  string userSex = 4;
+  int32 userAge = 5;
+  string userEmail = 6;
+  string userDateBirth = 7;
 }
 
 message CreateUserResponse {
