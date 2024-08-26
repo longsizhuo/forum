@@ -10,6 +10,7 @@ protoc --go_out=. --go-grpc_out=. proto\forum.proto
 ```shell
 cd FrontEnd
 npm install
+npm install -g protoc-gen-grpc-web
 cd ..
 protoc -I ./BackEnd/proto ./BackEnd/proto/forum.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
 ```
