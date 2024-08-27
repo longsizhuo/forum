@@ -66,13 +66,13 @@ func main() {
 
 }
 
-var BasePath = "./"
+var BasePath = "./BackEnd"
 
 func InitConfig() {
 	if basePath := os.Getenv("BASE_PATH"); basePath != "" {
 		BasePath = basePath
 	}
-	configPath := filepath.Join(BasePath, "Config", "app.yml")
+	configPath := filepath.Join(BasePath, "config", "app.yml")
 	fmt.Println("configPath", configPath)
 	viper.SetConfigName("app")
 	viper.SetConfigType("yaml")
