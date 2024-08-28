@@ -34,5 +34,6 @@ protoc -I ./BackEnd/proto ./BackEnd/proto/forum.proto --js_out=import_style=comm
 通过这两个文件我可以在golang中使用grpc的服务. 其中的内容是`ForumService`的接口.
 3. 接下来在`service/forumService.go`中实现了`ForumService`的接口, 这个接口是我在`proto/forum.proto`文件中定义的, 通过这个接口我可以实现grpc的服务.
 
-Gin + gRPC(`https 2.0`) + webSocket(`ws`)
-React
+## License
+
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. See the [LICENSE](LICENSE) file for more details.
