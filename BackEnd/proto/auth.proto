@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package auth;
-option go_package = "github.com/longsizhuo/forum/proto/auth;forum";
+option go_package = "./proto/auth;forum";
 
 service AuthService {
   rpc Login (LoginRequest) returns (LoginResponse);

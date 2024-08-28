@@ -8,9 +8,9 @@ go mod tidy
 ```
 ```shell
 # 这个要单独运行,  文件地址问题的原因
-protoc --go_out=. --go-grpc_out=. BackEnd\proto\forum.proto
-protoc --go_out=. --go-grpc_out=. BackEnd\proto\chat.proto
-protoc --go_out=. --go-grpc_out=. BackEnd\proto\auth.proto
+protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\forum.proto
+protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\chat.proto
+protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\auth.proto
 ```
 
 2. Second change `config/__app.yml` name to `config/app.yml`, and set the database in this file.
