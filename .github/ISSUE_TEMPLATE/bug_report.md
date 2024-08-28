@@ -1,38 +1,40 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
+title: "[BUG]"
+labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Bug Description** Provide a clear and concise description of the bug you encountered in the forum project.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Steps to Reproduce** Detail the steps to reproduce the issue:
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+1. Run the forum backend using `go run main.go`.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+2. Access the forum via the frontend at `localhost`.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+3. Perform the specific action (e.g., create a new thread, post a reply).
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+4. Observe the error.
 
-**Additional context**
-Add any other context about the problem here.
+**Expected Behavior** Describe what you expected to happen.
+
+**Screenshots/Logs** Include any relevant screenshots, console logs, or error messages.
+
+**Environment Details**:
+
+**Backend**:
+
+OS: [e.g., Ubuntu 20.04]
+
+Go Version: [e.g., 1.23.0]
+
+**Frontend**:
+
+Browser: [e.g., Chrome 114]
+
+Version: [e.g., 22]
+
+**Additional Context** Add any other relevant context about the problem, such as recent changes to the code or environment.
