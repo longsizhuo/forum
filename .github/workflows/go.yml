@@ -40,6 +40,9 @@ jobs:
           protoc --go_out=BackEnd/proto --go-grpc_out=BackEnd/proto BackEnd/proto/chat.proto
           protoc --go_out=BackEnd/proto --go-grpc_out=BackEnd/proto BackEnd/proto/auth.proto
 
+      - name: List generated files after protoc
+        run: |
+          ls -R BackEnd/proto
 
       - name: Check if forum.pb.go exists
         run: |
