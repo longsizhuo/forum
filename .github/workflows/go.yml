@@ -36,9 +36,10 @@ jobs:
 
       - name: Generate gRPC code for Go
         run: |
-          protoc --go_out=. --go-grpc_out=. BackEnd/proto/forum.proto
-          protoc --go_out=. --go-grpc_out=. BackEnd/proto/chat.proto
-          protoc --go_out=. --go-grpc_out=. BackEnd/proto/auth.proto
+          protoc --go_out=BackEnd/proto --go-grpc_out=BackEnd/proto BackEnd/proto/forum.proto
+          protoc --go_out=BackEnd/proto --go-grpc_out=BackEnd/proto BackEnd/proto/chat.proto
+          protoc --go_out=BackEnd/proto --go-grpc_out=BackEnd/proto BackEnd/proto/auth.proto
+
 
       - name: Check if forum.pb.go exists
         run: |
