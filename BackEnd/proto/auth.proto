@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package auth;
+option go_package = "./proto/auth;auth";
+
+service AuthService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1; // JWT token
+  string message = 2; // 可选的消息（如登录成功或失败的原因）
+}
