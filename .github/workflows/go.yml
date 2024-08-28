@@ -37,6 +37,7 @@ jobs:
         run: |
           protoc --go_out=. --go-grpc_out=. BackEnd/proto/forum.proto
           protoc --go_out=. --go-grpc_out=. BackEnd/proto/chat.proto
+          protoc --go_out=. --go-grpc_out=. BackEnd/proto/auth.proto
 
       - name: Build BackEnd
         run: |
