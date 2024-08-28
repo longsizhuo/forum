@@ -2,7 +2,7 @@
 syntax = "proto3";
 
 package proto;
-option go_package = "./proto/user;forum";
+option go_package = "github.com/longsizhuo/forum/proto/user;forum";
 
 service ForumService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
