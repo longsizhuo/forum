@@ -1,0 +1,47 @@
+name: Build and Compile
+
+on:
+  push:
+    branches:
+     - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go 1.23.0
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.0
+
+      - name: Install npm
+        run: |
+          sudo apt-get install -y npm
+
+      - name: Generate gRPC code for Go
+        run: |
+          protoc --go_out=. --go-grpc_out=. BackEnd/proto/forum.proto
+          protoc --go_out=. --go-grpc_out=. BackEnd/proto/chat.proto
+
+      - name: Build BackEnd
+        run: |
+          cd BackEnd
+          go build ./...
+
+      - name: Generate gRPC code for FrontEnd
+        run: |
+          protoc -I ./BackEnd/proto ./BackEnd/proto/forum.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
+          protoc -I ./BackEnd/proto ./BackEnd/proto/chat.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
+
+      - name: Build FrontEnd
+        run: |
+          cd FrontEnd
+          npm install
+          npm run build
