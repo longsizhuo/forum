@@ -21,9 +21,11 @@ jobs:
         with:
           go-version: 1.23.0
 
-      - name: Install npm
+      - name: Install
         run: |
           sudo apt-get install -y npm
+          sudo apt-get install -y protobuf-compiler
+
 
       - name: Generate gRPC code for Go
         run: |
@@ -35,13 +37,13 @@ jobs:
           cd BackEnd
           go build ./...
 
-      - name: Generate gRPC code for FrontEnd
-        run: |
-          protoc -I ./BackEnd/proto ./BackEnd/proto/forum.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
-          protoc -I ./BackEnd/proto ./BackEnd/proto/chat.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
+      # - name: Generate gRPC code for FrontEnd
+      #   run: |
+      #     protoc -I ./BackEnd/proto ./BackEnd/proto/forum.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
+      #     protoc -I ./BackEnd/proto ./BackEnd/proto/chat.proto --js_out=import_style=commonjs:./FrontEnd/src/proto --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./FrontEnd/src/proto
 
-      - name: Build FrontEnd
-        run: |
-          cd FrontEnd
-          npm install
-          npm run build
+      # - name: Build FrontEnd
+      #   run: |
+      #     cd FrontEnd
+      #     npm install
+      #     npm run build
