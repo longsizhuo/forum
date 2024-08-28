@@ -21,8 +21,9 @@ jobs:
         with:
           go-version: 1.23.0
 
-      - name: Install
+      - name: Install protoc
         run: |
+          sudo apt-get update
           sudo apt-get install -y npm
           sudo apt-get install -y protobuf-compiler
 
@@ -39,10 +40,19 @@ jobs:
           protoc --go_out=. --go-grpc_out=. BackEnd/proto/chat.proto
           protoc --go_out=. --go-grpc_out=. BackEnd/proto/auth.proto
 
+      - name: Check if forum.pb.go exists
+        run: |
+          if [ ! -f BackEnd/proto/user/forum.pb.go ]; then
+            echo "forum.pb.go not found!"
+            exit 1
+          fi
+
       - name: Build BackEnd
         run: |
           cd BackEnd
           go mod tidy
+          go clean -modcache  # 清理模块缓存
+
           go build ./...
 
       # - name: Generate gRPC code for FrontEnd
