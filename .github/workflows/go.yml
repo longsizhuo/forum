@@ -24,7 +24,6 @@ jobs:
       - name: Install protoc
         run: |
           sudo apt-get update
-          sudo apt-get install -y npm
           sudo apt-get install -y protobuf-compiler
 
       - name: Install protoc-gen-go and protoc-gen-go-grpc
@@ -55,8 +54,7 @@ jobs:
         run: |
           cd BackEnd
           go mod tidy
-          go clean -modcache  # 清理模块缓存
-
+          go install 
           go build ./...
 
       # - name: Generate gRPC code for FrontEnd
