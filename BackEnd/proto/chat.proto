@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package chat;
+option go_package = "./proto/chat;forum";
+
+// 导入用于时间戳的标准库
+import "google/protobuf/timestamp.proto";
+
+// 定义消息的服务接口
+service ChatService {
+  // 发送消息
+  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
+
+  // 获取聊天历史
+  rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
+
+  // 创建群组（频道）
+  rpc CreateChannel (CreateChannelRequest) returns (CreateChannelResponse);
+
+  // 添加用户到群组
+  rpc AddUserToChannel (AddUserToChannelRequest) returns (AddUserToChannelResponse);
+
+  // 从群组删除用户
+  rpc RemoveUserFromChannel (RemoveUserFromChannelRequest) returns (RemoveUserFromChannelResponse);
+}
+
+// 定义消息类型
+message Message {
+  int64 message_id = 1;
+  int64 channel_id = 2;
+  int64 user_id = 3;
+
+  // 通过 oneof 实现不同类型的消息
+  oneof content {
+    string text = 4;
+    Media media = 5;
+  }
+}
+
+// 媒体消息
+message Media {
+  string file_type = 1;  // "image", "video", "file"
+  string file_url = 2;   // 文件的URL或路径
+  int64 file_size = 3;   // 文件大小
+}
+
+// 发送消息的请求
+message SendMessageRequest {
+  int64 channel_id = 1;
+  int64 user_id = 2;
+  oneof message {
+    string text = 3;
+    Media media = 4;
+  }
+}
+
+// 发送消息的响应
+message SendMessageResponse {
+  bool success = 1;
+  string message = 2;
+  Message sent_message = 3;
+}
+
+// 获取聊天历史的请求
+message GetChatHistoryRequest {
+  int64 channel_id = 1;
+  google.protobuf.Timestamp start_time = 2;  // 可选，开始时间
+  google.protobuf.Timestamp end_time = 3;    // 可选，结束时间
+}
+
+// 获取聊天历史的响应
+message GetChatHistoryResponse {
+  repeated Message messages = 1;
+}
+
+// Channel
+// 创建群组的请求
+message CreateChannelRequest {
+  string channel_name = 1;
+  string description = 2;
+  int64 owner_id = 3;
+
+  repeated sint64 user_ids = 4;
+}
+
+
+message CreateChannelResponse {
+  bool success = 1;
+  string message = 2;
+  Channel created_channel = 3;
+}
+
+message Channel {
+  // CID
+  int64 channel_id = 1;
+  // CNAME
+  string channel_name = 2;
+  // CDESC
+  string description = 3;
+  // COWNER
+  int64 owner_id = 4;
+  // 频道中的用户id 列表
+  repeated sint64 user_ids = 5;
+}
+
+message AddUserToChannelRequest {
+  int64 channel_id = 1;
+  int64 user_id = 2;
+}
+
+message AddUserToChannelResponse {
+  bool success = 1;
+  string message = 2;
+  Channel updated_channel = 3;
+}
+
+message RemoveUserFromChannelRequest {
+  int64 channel_id = 1;
+  int64 user_id = 2;
+}
+
+message RemoveUserFromChannelResponse {
+  bool success = 1;
+  string message = 2;
+  Channel updated_channel = 3;
+}

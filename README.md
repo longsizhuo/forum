@@ -3,9 +3,19 @@
 # go version: 1.23.0
 cd BackEnd
 go mod tidy
-protoc --go_out=. --go-grpc_out=. proto\forum.proto
 ```
+```shell
+# 这个要单独运行,  文件地址问题的原因
+protoc --go_out=. --go-grpc_out=. proto\forum.proto
+protoc --go_out=. --go-grpc_out=. proto\chat.proto
+```
+
 2. Second change `config/__app.yml` name to `config/app.yml`, and set the database in this file.
+
+3. Third
+```shell
+go run main.go
+```
 
 ```shell
 cd FrontEnd

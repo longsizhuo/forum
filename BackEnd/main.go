@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 	"github.com/longsizhuo/forum/models"
-	pb "github.com/longsizhuo/forum/proto"
+	pb "github.com/longsizhuo/forum/proto/user"
 	"github.com/longsizhuo/forum/services"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"

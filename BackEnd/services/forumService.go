@@ -1,11 +1,11 @@
-// service/forumService.go
+// Package services service/forumService.go
 package services
 
 import (
 	"context"
 	"fmt"
 	"github.com/longsizhuo/forum/models"
-	pb "github.com/longsizhuo/forum/proto"
+	pb "github.com/longsizhuo/forum/proto/user"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"time"
@@ -17,7 +17,7 @@ type Server struct {
 }
 
 // CreateUser creates a new user
-func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	defaultRoleID := 1
 
 	dateOfBirth, err := time.Parse("2006/01/02", req.UserDateBirth)
@@ -49,7 +49,6 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 		RoleID:       defaultRoleID,
 		UserEmail:    req.UserEmail,
 		DateBirth:    dateOfBirth,
-		UserRegister: time.Now(), // Assuming you want to set the creation time
 	}
 	if err := s.Db.Create(&user).Error; err != nil {
 		return nil, err
@@ -57,7 +56,7 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 	return &pb.CreateUserResponse{UserId: int32(user.UID)}, nil
 }
 
-func (s *Server) CreateTopic(ctx context.Context, req *pb.CreateTopicRequest) (*pb.CreateTopicResponse, error) {
+func (s *Server) CreateTopic(_ context.Context, req *pb.CreateTopicRequest) (*pb.CreateTopicResponse, error) {
 	topic := models.Topic{
 		UID:     int(req.UserId),
 		SID:     int(req.SectionId),
@@ -70,7 +69,7 @@ func (s *Server) CreateTopic(ctx context.Context, req *pb.CreateTopicRequest) (*
 	return &pb.CreateTopicResponse{TopicId: int32(topic.TID)}, nil
 }
 
-func (s *Server) CreateReply(ctx context.Context, req *pb.CreateReplyRequest) (*pb.CreateReplyResponse, error) {
+func (s *Server) CreateReply(_ context.Context, req *pb.CreateReplyRequest) (*pb.CreateReplyResponse, error) {
 	reply := models.Reply{
 		UID:     int(req.UserId),
 		TID:     int(req.TopicId),
@@ -82,7 +81,7 @@ func (s *Server) CreateReply(ctx context.Context, req *pb.CreateReplyRequest) (*
 	return &pb.CreateReplyResponse{ReplyId: int32(reply.RID)}, nil
 }
 
-func (s *Server) GetTopics(ctx context.Context, req *pb.GetTopicsRequest) (*pb.GetTopicsResponse, error) {
+func (s *Server) GetTopics(_ context.Context, req *pb.GetTopicsRequest) (*pb.GetTopicsResponse, error) {
 	var topics []models.Topic
 	if err := s.Db.Where("s_id = ?", req.SectionId).Find(&topics).Error; err != nil {
 		return nil, err
@@ -102,7 +101,7 @@ func (s *Server) GetTopics(ctx context.Context, req *pb.GetTopicsRequest) (*pb.G
 	return &pb.GetTopicsResponse{Topics: responseTopics}, nil
 }
 
-func (s *Server) GetReplies(ctx context.Context, req *pb.GetRepliesRequest) (*pb.GetRepliesResponse, error) {
+func (s *Server) GetReplies(_ context.Context, req *pb.GetRepliesRequest) (*pb.GetRepliesResponse, error) {
 	var replies []models.Reply
 	if err := s.Db.Where("t_id = ?", req.TopicId).Find(&replies).Error; err != nil {
 		return nil, err
