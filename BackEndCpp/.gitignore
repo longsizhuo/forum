@@ -3,3 +3,6 @@ config/app.yml
 *.pb.*
 
 build/
+build/.cmake/
+
+.cache/
