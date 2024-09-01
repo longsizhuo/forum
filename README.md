@@ -11,6 +11,11 @@ go mod tidy
 protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\forum.proto
 protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\chat.proto
 protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\auth.proto
+
+# 当需要cpp版本功能重载时请执行
+cd BackEndCpp
+protoc --cpp_out=. --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` proto/forum.proto
+
 ```
 
 2. Second change `config/__app.yml` name to `config/app.yml`, and set the database in this file.

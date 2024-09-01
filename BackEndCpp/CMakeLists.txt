@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 find_program(_PROTOBUF_PROTOC /usr/bin/protoc)
 find_program(_GRPC_CPP_PLUGIN_EXECUTABLE /usr/bin/grpc_cpp_plugin)
 
+# include_directories(/opt/homebrew/Cellar/protobuf/27.3_1/include)
+# link_directories(/opt/homebrew/Cellar/protobuf/27.3_1/lib)
 
 include_directories(/usr/include/mysql)
 link_directories(/usr/lib/mysql)
@@ -41,7 +43,7 @@ add_custom_command(
       DEPENDS "${forum_proto}"
 )
 
-add_executable(server main.cc)
-target_link_libraries(server PRIVATE /usr/lib/x86_64-linux-gnu/libyaml-cpp.so)
-target_link_libraries(server PRIVATE /usr/lib/x86_64-linux-gnu/libmysqlclient.so)
+# add_executable(server main.cc)
+# target_link_libraries(server PRIVATE /usr/lib/x86_64-linux-gnu/libyaml-cpp.so)
+# target_link_libraries(server PRIVATE /usr/lib/x86_64-linux-gnu/libmysqlclient.so)
 
