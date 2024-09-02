@@ -1,9 +1,15 @@
 #include "user.hpp"
-#include <bcrypt/BCrypt.hpp> // 使用 bcrypt-cpp 库进行密码哈希
+#include <cppconn/exception.h>
+#include <memory>
+#include <sodium.h>
 #include <sstream>
 #include <iomanip>
 #include <string>
-#include "service/database.hpp"
+#include <ctime>
+#include "database.hpp"
+#include <mysql_connection.h>
+#include <cppconn/prepared_statement.h>
+#include <optional>
 
 // 构造函数实现
 User::User(const std::string& userName,
@@ -66,6 +72,8 @@ void User::setUserName(const std::string& userName) {
 }
 
 void User::setUserPassword(const std::string& userPassword) {
+    // unsigned char hash[crypto_generichash_BYTES];
+    // auto hashed = crypto_generichash(hash, sizeof(hash), reinterpret_cast<const unsigned char*>(userPassword.c_str()), userPassword.size(), nullptr, 0);
     userPassword_ = userPassword;
 }
 
@@ -89,20 +97,44 @@ void User::setDateBirth(const std::tm& dateBirth) {
     dateBirth_ = dateBirth;
 }
 // TODO: Database operation methods
-bool User::saveToDatabase(Database& db) const {
-    return false;
+bool User::saveToDatabase(sql::Connection* con, User usr) const {
+    try {
+    std::unique_ptr<sql::PreparedStatement> statement(con->prepareStatement(
+    "INSERT INTO User (userName, userPassword, userSex, userAge, roleID, userEmail, dateBirth, uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"));
+    statement->setString(1, usr.getUserName());
+    statement->setString(2, usr.getUserPassword());
+    statement->setString(3, usr.getUserSex());
+    statement->setInt(4, usr.getUserAge());
+    statement->setInt(5, usr.getRoleID());
+    statement->setString(6, usr.getUserEmail());
+    std::ostringstream oss;
+        oss << std::put_time(&usr.dateBirth_, "%Y-%m-%d %H:%M:%S"); // 采用标准的时间格式
+        statement->setString(7, oss.str());
+
+        if (usr.uid_.has_value()) {
+            statement->setInt(8, usr.uid_.value());
+        } else {
+            statement->setNull(8, sql::DataType::INTEGER);
+        }
+
+        statement->executeUpdate();
+        return true;
+    } catch (sql::SQLException& e) {
+        std::cerr << "SQL error: " << e.what() << std::endl;
+        return false;
+    }
 }
 
-std::optional<User> User::getUserByEmail(Database& db, const std::string& email) {
+std::optional<User> User::getUserByEmail(sql::Connection& con, const std::string& email) {
     return std::nullopt;
 }
 
-std::optional<User> User::getUserByUID(Database& db, int uid) {
+std::optional<User> User::getUserByUID(sql::Connection& con, int uid) {
     return std::nullopt;
 }
 
 // TODO: Validation methods
-bool User::isEmailRegistered(Database& db, const std::string& email) {
+bool User::isEmailRegistered(sql::Connection& con, const std::string& email) {
     return false;
 }
 
