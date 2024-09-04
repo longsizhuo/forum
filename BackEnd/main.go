@@ -38,7 +38,6 @@ func main() {
 		panic("failed to connect database")
 	}
 	err = db.AutoMigrate(
-		&models.AuthRole{},
 		&models.User{},
 		&models.Admin{},
 		&models.Section{},
@@ -66,7 +65,7 @@ func main() {
 
 }
 
-var BasePath = "./BackEnd"
+var BasePath = ""
 
 func InitConfig() {
 	if basePath := os.Getenv("BASE_PATH"); basePath != "" {

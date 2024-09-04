@@ -16,3 +16,4 @@ message LoginResponse {
   string token = 1; // JWT token
   string message = 2; // 可选的消息（如登录成功或失败的原因）
 }
+
