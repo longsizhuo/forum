@@ -12,7 +12,11 @@ protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\forum.proto
 protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\chat.proto
 protoc --go_out=BackEnd\ --go-grpc_out=BackEnd\ BackEnd\proto\auth.proto
 ```
+Mac需要用这个格式：
+```shell
+protoc --go_out=BackEnd --go-grpc_out=BackEnd BackEnd/proto/friend.proto
 
+```
 2. Second change `config/__app.yml` name to `config/app.yml`, and set the database in this file.
 
 3. Third
