@@ -1,0 +1,44 @@
+// proto/forum.proto
+syntax = "proto3";
+
+package proto;
+option go_package = "./proto/friend;friend";
+
+service ForumService {
+  rpc AddFriend(AddFriendRequest) returns (AddFriendResponse);
+  rpc DeleteFriend(DeleteFriendRequest) returns (DeleteFriendResponse);
+  rpc CheckFriendship(CheckFriendshipRequest) returns (CheckFriendshipResponse);
+}
+
+message AddFriendRequest{
+  int32 fromId= 1;  // 申请加好友的用户的id
+  int32 toId = 2; // 收到好友申请的用户的id
+}
+
+message AddFriendResponse{
+  int32 fromId= 1;  // 申请加好友的用户的id
+  int32 toId = 2; // 收到好友申请的用户的id
+  bool isFriend = 3; // 是否是好友
+}
+
+message DeleteFriendRequest{
+  int32 fromId= 1;  // 删除好友的用户的id
+  int32 toId = 2; // 被删除好友的用户的id
+}
+
+message DeleteFriendResponse{
+  int32 fromId= 1;  // 删除好友的用户的id
+  int32 toId = 2; // 被删除好友的用户的id
+  bool isFriend = 3; // 是否是好友
+}
+
+message CheckFriendshipRequest{
+  int32 fromId= 1;  // 用户1的id
+  int32 toId = 2; // 用户2的id
+}
+
+message CheckFriendshipResponse{
+  int32 fromId= 1;  // 用户1的id
+  int32 toId = 2; // 用户2的id
+  bool isFriend = 3; // 是否是好友
+}

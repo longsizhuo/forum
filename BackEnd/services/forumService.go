@@ -53,7 +53,7 @@ func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.C
 	if err := s.Db.Create(&user).Error; err != nil {
 		return nil, err
 	}
-	return &pb.CreateUserResponse{UserId: int32(user.UID)}, nil
+	return &pb.CreateUserResponse{UserId: int32(user.ID)}, nil
 }
 
 func (s *Server) CreateTopic(_ context.Context, req *pb.CreateTopicRequest) (*pb.CreateTopicResponse, error) {
@@ -66,7 +66,7 @@ func (s *Server) CreateTopic(_ context.Context, req *pb.CreateTopicRequest) (*pb
 	if err := s.Db.Create(&topic).Error; err != nil {
 		return nil, err
 	}
-	return &pb.CreateTopicResponse{TopicId: int32(topic.TID)}, nil
+	return &pb.CreateTopicResponse{TopicId: int32(topic.ID)}, nil
 }
 
 func (s *Server) CreateReply(_ context.Context, req *pb.CreateReplyRequest) (*pb.CreateReplyResponse, error) {
@@ -78,7 +78,7 @@ func (s *Server) CreateReply(_ context.Context, req *pb.CreateReplyRequest) (*pb
 	if err := s.Db.Create(&reply).Error; err != nil {
 		return nil, err
 	}
-	return &pb.CreateReplyResponse{ReplyId: int32(reply.RID)}, nil
+	return &pb.CreateReplyResponse{ReplyId: int32(reply.ID)}, nil
 }
 
 func (s *Server) GetTopics(_ context.Context, req *pb.GetTopicsRequest) (*pb.GetTopicsResponse, error) {
@@ -90,7 +90,7 @@ func (s *Server) GetTopics(_ context.Context, req *pb.GetTopicsRequest) (*pb.Get
 	var responseTopics []*pb.Topic
 	for _, topic := range topics {
 		responseTopics = append(responseTopics, &pb.Topic{
-			TopicId:    int32(topic.TID),
+			TopicId:    int32(topic.ID),
 			UserId:     int32(topic.UID),
 			Title:      topic.Title,
 			Content:    topic.Content,
@@ -110,7 +110,7 @@ func (s *Server) GetReplies(_ context.Context, req *pb.GetRepliesRequest) (*pb.G
 	var responseReplies []*pb.Reply
 	for _, reply := range replies {
 		responseReplies = append(responseReplies, &pb.Reply{
-			ReplyId: int32(reply.RID),
+			ReplyId: int32(reply.ID),
 			UserId:  int32(reply.UID),
 			Content: reply.Content,
 		})
