@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"github.com/longsizhuo/forum/models"
+	friend "github.com/longsizhuo/forum/proto/friend"
 	pb "github.com/longsizhuo/forum/proto/user"
 	"github.com/longsizhuo/forum/services"
 	"github.com/spf13/viper"
@@ -56,6 +57,7 @@ func main() {
 	s := grpc.NewServer()
 	//注册服务
 	pb.RegisterForumServiceServer(s, &services.Server{Db: db})
+	friend.RegisterFriendServiceServer(s, &services.FriendService{Db: db})
 	log.Printf("server listening at %v", lis.Addr())
 
 	reflection.Register(s)
