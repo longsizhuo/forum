@@ -38,6 +38,7 @@ jobs:
           protoc --go_out=BackEnd --go-grpc_out=BackEnd BackEnd/proto/forum.proto
           protoc --go_out=BackEnd --go-grpc_out=BackEnd BackEnd/proto/chat.proto
           protoc --go_out=BackEnd --go-grpc_out=BackEnd BackEnd/proto/auth.proto
+          protoc --go_out=BackEnd --go-grpc_out=BackEnd BackEnd/proto/friend.proto
 
       - name: List generated files after protoc
         run: |
