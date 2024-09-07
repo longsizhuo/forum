@@ -37,7 +37,7 @@ func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.C
 
 	// Check if email is already registered (Assuming req contains Email field)
 	var existingUser models.User
-	if err := s.Db.Where("email = ?", req.UserEmail).First(&existingUser).Error; err == nil {
+	if err := s.Db.Where("user_email = ?", req.UserEmail).First(&existingUser).Error; err == nil {
 		return nil, fmt.Errorf("email is already registered")
 	}
 

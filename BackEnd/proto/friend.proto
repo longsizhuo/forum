@@ -2,9 +2,9 @@
 syntax = "proto3";
 
 package proto;
-option go_package = "./proto/friend;friend";
+option go_package = "./proto/friend;forum";
 
-service ForumService {
+service FriendService {
   rpc AddFriend(AddFriendRequest) returns (AddFriendResponse);
   rpc DeleteFriend(DeleteFriendRequest) returns (DeleteFriendResponse);
   rpc CheckFriendship(CheckFriendshipRequest) returns (CheckFriendshipResponse);
